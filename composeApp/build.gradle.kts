@@ -67,25 +67,25 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-
-        sourceSets.named("commonMain").configure {
-            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-        }
     }
 
-    ksp {
-        arg("KOIN_USE_COMPOSE_VIEWMODEL","true")
-        arg("KOIN_CONFIG_CHECK","true")
+    sourceSets.named("commonMain").configure {
+        kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
     }
+}
 
-    dependencies {
-        add("kspCommonMainMetadata", libs.koin.ksp.compiler)
-    }
+ksp {
+    arg("KOIN_USE_COMPOSE_VIEWMODEL","true")
+    arg("KOIN_CONFIG_CHECK","true")
+}
 
-    project.tasks.withType(KotlinCompilationTask::class.java).configureEach {
-        if(name != "kspCommonMainKotlinMetadata") {
-            dependsOn("kspCommonMainKotlinMetadata")
-        }
+dependencies {
+    add("kspCommonMainMetadata", libs.koin.ksp.compiler)
+}
+
+project.tasks.withType(KotlinCompilationTask::class.java).configureEach {
+    if(name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
     }
 }
 
